@@ -21,7 +21,7 @@ export const booksAPI = {
   getTrending: () => api.get('/books/trending'),
   getPopular: () => api.get('/books/popular'),
   getRecent: () => api.get('/books/recent'),
-  getById: (id) => api.get(`/books/${id}`),
+  getById: (id, userId) => api.get(`/books/${id}`, { params: { userId: userId || undefined } }),
   create: (bookData) => api.post('/books', bookData),
   update: (id, bookData) => api.put(`/books/${id}`, bookData),
   delete: (id) => api.delete(`/books/${id}`),
@@ -48,6 +48,24 @@ export const readingListAPI = {
     api.post('/reading-list', { userId, bookId, status }),
   update: (id, data) => api.put(`/reading-list/${id}`, data),
   remove: (id) => api.delete(`/reading-list/${id}`),
+};
+
+// Upload API
+export const uploadAPI = {
+  uploadCover: (file) => {
+    const formData = new FormData();
+    formData.append('cover', file);
+    return api.post('/upload/cover', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  },
+  uploadPdf: (file) => {
+    const formData = new FormData();
+    formData.append('pdf', file);
+    return api.post('/upload/pdf', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  },
 };
 
 // Users API

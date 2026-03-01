@@ -1,4 +1,5 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const router = express.Router();
 const { ReadingList, Book, Chapter } = require('../models');
 const { asyncHandler } = require('../middleware/errorHandler');
@@ -41,7 +42,7 @@ router.get('/user/:userId', asyncHandler(async (req, res) => {
 // Get reading list stats for user
 router.get('/user/:userId/stats', asyncHandler(async (req, res) => {
   const stats = await ReadingList.aggregate([
-    { $match: { userId: req.params.userId } },
+    { $match: { userId: new mongoose.Types.ObjectId(req.params.userId) } },
     {
       $group: {
         _id: '$status',

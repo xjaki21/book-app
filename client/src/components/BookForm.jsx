@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useRef } from 'react';
+import { uploadAPI } from '../api';
 
 const GENRES = [
   { value: 'fantasy', label: 'Fantasy' },
@@ -20,16 +21,63 @@ function BookForm({ book, onSave, onCancel }) {
     genre: book?.genre || 'other',
     status: book?.status || 'ongoing',
     tags: book?.tags?.join(', ') || '',
+    coverImage: book?.coverImage || '',
   });
+  const [coverPreview, setCoverPreview] = useState(book?.coverImage || '');
+  const [coverFile, setCoverFile] = useState(null);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef(null);
 
-  const handleSubmit = (e) => {
+  const handleCoverChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('Il file è troppo grande. Massimo 5MB.');
+      return;
+    }
+
+    setCoverFile(file);
+    const reader = new FileReader();
+    reader.onloadend = () => setCoverPreview(reader.result);
+    reader.readAsDataURL(file);
+  };
+
+  const handleRemoveCover = () => {
+    setCoverFile(null);
+    setCoverPreview('');
+    setFormData({ ...formData, coverImage: '' });
+    if (fileInputRef.current) fileInputRef.current.value = '';
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!formData.title.trim()) {
       alert('Il titolo è obbligatorio');
       return;
     }
+
+    let coverImage = formData.coverImage;
+
+    // Upload cover if a new file was selected
+    if (coverFile) {
+      try {
+        setUploading(true);
+        const response = await uploadAPI.uploadCover(coverFile);
+        coverImage = response.data.url;
+      } catch (error) {
+        console.error('Errore upload copertina:', error);
+        alert('Errore nel caricamento della copertina');
+        setUploading(false);
+        return;
+      } finally {
+        setUploading(false);
+      }
+    }
+
     onSave({
       ...formData,
+      coverImage,
       tags: formData.tags.split(',').map(t => t.trim()).filter(t => t)
     });
   };
@@ -46,6 +94,72 @@ function BookForm({ book, onSave, onCancel }) {
       <div className="modal" onClick={(e) => e.stopPropagation()}>
         <h2>{book ? '✏️ Modifica Libro' : '📚 Nuovo Libro'}</h2>
         <form onSubmit={handleSubmit}>
+          {/* Cover Image Upload */}
+          <div className="form-group">
+            <label>Copertina</label>
+            <div style={{ display: 'flex', gap: '16px', alignItems: 'flex-start' }}>
+              <div
+                onClick={() => fileInputRef.current?.click()}
+                style={{
+                  width: '120px',
+                  height: '170px',
+                  borderRadius: 'var(--radius-md)',
+                  overflow: 'hidden',
+                  cursor: 'pointer',
+                  border: '2px dashed var(--color-background-300)',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  flexShrink: 0,
+                  background: coverPreview ? 'none' : 'var(--color-background-100)',
+                  position: 'relative',
+                }}
+              >
+                {coverPreview ? (
+                  <img
+                    src={coverPreview}
+                    alt="Anteprima copertina"
+                    style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <div style={{ textAlign: 'center', color: 'var(--color-foreground-muted)', padding: '8px' }}>
+                    <div style={{ fontSize: '2rem' }}>📷</div>
+                    <div style={{ fontSize: '0.7rem', marginTop: '4px' }}>Clicca per caricare</div>
+                  </div>
+                )}
+              </div>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                <input
+                  ref={fileInputRef}
+                  type="file"
+                  accept="image/jpeg,image/png,image/webp,image/gif"
+                  onChange={handleCoverChange}
+                  style={{ display: 'none' }}
+                />
+                <button
+                  type="button"
+                  className="btn btn-secondary btn-sm"
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  📁 Scegli immagine
+                </button>
+                {coverPreview && (
+                  <button
+                    type="button"
+                    className="btn btn-ghost btn-sm"
+                    onClick={handleRemoveCover}
+                    style={{ color: 'var(--color-accent)' }}
+                  >
+                    🗑️ Rimuovi
+                  </button>
+                )}
+                <span style={{ fontSize: '0.75rem', color: 'var(--color-foreground-muted)' }}>
+                  JPEG, PNG, WebP, GIF · Max 5MB
+                </span>
+              </div>
+            </div>
+          </div>
+
           <div className="form-group">
             <label htmlFor="title">Titolo *</label>
             <input
@@ -119,11 +233,11 @@ function BookForm({ book, onSave, onCancel }) {
           </div>
 
           <div className="modal-actions">
-            <button type="button" className="btn btn-ghost" onClick={onCancel}>
+            <button type="button" className="btn btn-ghost" onClick={onCancel} disabled={uploading}>
               Annulla
             </button>
-            <button type="submit" className="btn btn-primary">
-              {book ? 'Salva Modifiche' : 'Crea Libro'}
+            <button type="submit" className="btn btn-primary" disabled={uploading}>
+              {uploading ? '⏳ Caricamento...' : (book ? 'Salva Modifiche' : 'Crea Libro')}
             </button>
           </div>
         </form>

@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { Book, Chapter, User } = require('../models');
+const { Book, BookView, Chapter, User } = require('../models');
 const { asyncHandler } = require('../middleware/errorHandler');
 
 // Get all books with filters
@@ -120,9 +120,17 @@ router.get('/:id', asyncHandler(async (req, res) => {
     return res.status(404).json({ error: 'Libro non trovato' });
   }
   
-  // Increment views
-  book.views += 1;
-  await book.save();
+  // Track unique views per visitor (userId or IP)
+  const visitorId = req.query.userId || req.ip;
+  try {
+    await BookView.create({ bookId: book._id, visitorId });
+    // Only increment if it's a new unique view (create succeeded)
+    book.views += 1;
+    await book.save();
+  } catch (err) {
+    // Duplicate key error = already viewed, ignore
+    if (err.code !== 11000) throw err;
+  }
   
   const chapters = await Chapter.find({ bookId: book._id })
     .sort({ order: 1 });

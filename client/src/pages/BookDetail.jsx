@@ -44,7 +44,7 @@ function BookDetail({ user }) {
 
   const loadBook = async () => {
     try {
-      const response = await booksAPI.getById(id);
+      const response = await booksAPI.getById(id, user?._id);
       setBook(response.data);
     } catch (error) {
       console.error('Errore:', error);
@@ -211,22 +211,39 @@ function BookDetail({ user }) {
             position: 'relative',
             borderRadius: 'var(--radius-md)',
             overflow: 'hidden',
-            background: `linear-gradient(135deg, ${GENRE_COLORS[book.genre] || GENRE_COLORS.other} 0%, ${GENRE_COLORS[book.genre] || GENRE_COLORS.other}99 100%)`
+            background: book.coverImage 
+              ? 'var(--color-background-200)' 
+              : `linear-gradient(135deg, ${GENRE_COLORS[book.genre] || GENRE_COLORS.other} 0%, ${GENRE_COLORS[book.genre] || GENRE_COLORS.other}99 100%)`
           }}>
-            <div style={{ 
-              position: 'absolute',
-              top: 0,
-              left: 0,
-              right: 0,
-              bottom: 0,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '5rem',
-              color: 'rgba(255,255,255,0.5)'
-            }}>
-              📖
-            </div>
+            {book.coverImage ? (
+              <img 
+                src={book.coverImage} 
+                alt={book.title}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: '100%',
+                  objectFit: 'cover'
+                }}
+              />
+            ) : (
+              <div style={{ 
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '5rem',
+                color: 'rgba(255,255,255,0.5)'
+              }}>
+                📖
+              </div>
+            )}
           </div>
           
           {/* Actions */}

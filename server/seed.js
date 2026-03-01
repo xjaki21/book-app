@@ -11,7 +11,7 @@ const sampleBooks = [
     genre: 'fantasy',
     status: 'ongoing',
     tags: ['avventura', 'magia', 'epico'],
-    coverImage: '',
+    coverImage: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?w=400&h=600&fit=crop',
     views: 1250,
     likes: 89
   },
@@ -21,7 +21,7 @@ const sampleBooks = [
     genre: 'romance',
     status: 'completed',
     tags: ['amore', 'drama', 'contemporaneo'],
-    coverImage: '',
+    coverImage: 'https://images.unsplash.com/photo-1474552226712-ac0f0961a954?w=400&h=600&fit=crop',
     views: 2100,
     likes: 156
   },
@@ -31,7 +31,7 @@ const sampleBooks = [
     genre: 'thriller',
     status: 'ongoing',
     tags: ['tecnologia', 'suspense', 'AI'],
-    coverImage: '',
+    coverImage: 'https://images.unsplash.com/photo-1550751827-4bd374c3f58b?w=400&h=600&fit=crop',
     views: 890,
     likes: 67
   },
@@ -41,7 +41,7 @@ const sampleBooks = [
     genre: 'mystery',
     status: 'completed',
     tags: ['mistero', 'investigazione', 'suspense'],
-    coverImage: '',
+    coverImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=400&h=600&fit=crop',
     views: 1560,
     likes: 112
   },
@@ -51,7 +51,7 @@ const sampleBooks = [
     genre: 'sci-fi',
     status: 'ongoing',
     tags: ['spazio', 'futuro', 'esplorazione'],
-    coverImage: '',
+    coverImage: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=400&h=600&fit=crop',
     views: 780,
     likes: 54
   },
@@ -61,7 +61,7 @@ const sampleBooks = [
     genre: 'horror',
     status: 'completed',
     tags: ['paura', 'soprannaturale', 'famiglia'],
-    coverImage: '',
+    coverImage: 'https://images.unsplash.com/photo-1520013817300-1f4c1cb245ef?w=400&h=600&fit=crop',
     views: 1890,
     likes: 134
   }
