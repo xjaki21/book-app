@@ -55,14 +55,21 @@ CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 ```
 
-4. (Opzionale) Popola il database con dati di esempio:
+4. Crea il file `client/.env`:
+```env
+VITE_API_URL=/api
+VITE_API_TARGET=http://localhost:3000
+VITE_APP_NAME=Book Community
+```
+
+5. (Opzionale) Popola il database con dati di esempio (viene eseguito solo se il database è vuoto):
 ```bash
 cd server
 node seed.js
 ```
 Credenziali utente demo: `demo@example.com` / `demo123`
 
-5. Avvia il progetto in modalità sviluppo:
+6. Avvia il progetto in modalità sviluppo:
 ```bash
 npm run dev
 ```
@@ -145,14 +152,21 @@ CLOUDINARY_API_KEY=your_api_key
 CLOUDINARY_API_SECRET=your_api_secret
 ```
 
-4. (Optional) Seed the database with sample data:
+4. Create the `client/.env` file:
+```env
+VITE_API_URL=/api
+VITE_API_TARGET=http://localhost:3000
+VITE_APP_NAME=Book Community
+```
+
+5. (Optional) Seed the database with sample data (only runs if the database is empty):
 ```bash
 cd server
 node seed.js
 ```
 Demo user credentials: `demo@example.com` / `demo123`
 
-5. Start the project in development mode:
+6. Start the project in development mode:
 ```bash
 npm run dev
 ```
