@@ -158,7 +158,7 @@ function BookDetail({ user }) {
         <div className="reader-content">
           {selectedChapter.content}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px', paddingTop: '20px', borderTop: '1px solid var(--color-background-300)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '40px', paddingTop: '20px', borderTop: '1px solid var(--color-background-300)', flexWrap: 'wrap', gap: '12px' }}>
           {book.chapters && book.chapters.findIndex(c => c._id === selectedChapter._id) > 0 && (
             <button 
               className="btn btn-secondary"
@@ -194,15 +194,7 @@ function BookDetail({ user }) {
       </Link>
 
       {/* Book Header */}
-      <div style={{ 
-        display: 'grid', 
-        gridTemplateColumns: '230px 1fr',
-        gap: '40px',
-        marginBottom: '40px',
-        background: 'var(--color-background-100)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '32px',
-      }}>
+      <div className="book-detail-header">
         {/* Cover */}
         <div>
           <div style={{ 
@@ -319,7 +311,7 @@ function BookDetail({ user }) {
           )}
 
           {/* Stats */}
-          <div style={{ display: 'flex', gap: '32px', marginBottom: '24px' }}>
+          <div style={{ display: 'flex', gap: '32px', marginBottom: '24px', flexWrap: 'wrap' }}>
             <div>
               <div style={{ fontSize: '1.5rem', fontWeight: '700', color: 'var(--color-primary)' }}>
                 {book.chapters?.length || 0}
@@ -366,11 +358,7 @@ function BookDetail({ user }) {
       </div>
 
       {/* Chapters Section */}
-      <div style={{ 
-        background: 'var(--color-background-100)',
-        borderRadius: 'var(--radius-lg)',
-        padding: '32px',
-      }}>
+      <div className="book-detail-section">
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
           <h2>Capitoli</h2>
           {isMyBook && (

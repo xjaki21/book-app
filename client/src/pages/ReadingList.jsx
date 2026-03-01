@@ -174,15 +174,7 @@ function ReadingList({ user, setUser }) {
           {readingList.map((entry) => (
             <div 
               key={entry._id} 
-              style={{ 
-                background: 'var(--color-background-100)',
-                borderRadius: 'var(--radius-lg)',
-                padding: '20px',
-                display: 'grid',
-                gridTemplateColumns: '80px 1fr auto',
-                gap: '20px',
-                alignItems: 'center'
-              }}
+              className="reading-list-entry"
             >
               <Link to={`/books/${entry.book._id}`}>
                 <div style={{ 

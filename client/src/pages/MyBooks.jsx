@@ -98,7 +98,7 @@ function MyBooks({ user, setUser }) {
 
   return (
     <div>
-      <div className="page-header" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+      <div className="page-header page-header-flex">
         <div>
           <h1>I Miei Libri</h1>
           <p>Gestisci i tuoi libri e capitoli</p>
