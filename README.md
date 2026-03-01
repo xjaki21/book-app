@@ -4,10 +4,13 @@ Un'applicazione web per condividere e gestire libri nella community.
 
 ## Funzionalità
 
-- 📚 **Pubblica i tuoi libri**: Aggiungi i tuoi libri organizzati in capitoli e condividili con la community
-- 📖 **Lista lettura**: Tieni traccia dei libri che hai letto
-- 👥 **Community**: Esplora i libri pubblicati da altri utenti
-- ✍️ **Gestione capitoli**: Organizza i tuoi libri in capitoli
+- **Pubblica i tuoi libri**: Aggiungi i tuoi libri con copertine personalizzate e condividili con la community
+- **Lista lettura**: Tieni traccia dei tuoi progressi (Da Leggere, In Lettura, Completato, In Pausa, Abbandonato)
+- **Community**: Esplora i libri pubblicati da altri utenti
+- **Gestione capitoli**: Organizza i tuoi libri in capitoli, scrivi direttamente o carica un PDF
+- **Copertine**: Carica immagini di copertina per i tuoi libri (JPEG, PNG, WebP, GIF — max 5MB)
+- **Import PDF**: Carica un PDF e il testo viene estratto automaticamente come capitolo
+
 
 ## Struttura del Progetto
 
@@ -15,8 +18,14 @@ Un'applicazione web per condividere e gestire libri nella community.
 book-app/
 ├── client/          # Frontend React + Vite
 ├── server/          # Backend Node.js + Express
+├── docker-compose.yml
 └── README.md
 ```
+
+## Prerequisiti
+
+- **Node.js** (v18+)
+- **MongoDB** (locale o via Docker)
 
 ## Installazione
 
@@ -25,7 +34,29 @@ book-app/
 npm run install-all
 ```
 
-2. Avvia il progetto in modalità sviluppo:
+2. Avvia MongoDB con Docker:
+```bash
+docker compose up -d
+```
+Oppure, se hai MongoDB installato localmente:
+```bash
+sudo systemctl start mongodb
+```
+
+3. Crea il file `server/.env`:
+```env
+MONGODB_URI=mongodb://localhost:27017/book-app
+PORT=3000
+```
+
+4. (Opzionale) Popola il database con dati di esempio:
+```bash
+cd server
+node seed.js
+```
+Credenziali utente demo: `demo@example.com` / `demo123`
+
+5. Avvia il progetto in modalità sviluppo:
 ```bash
 npm run dev
 ```
@@ -44,4 +75,7 @@ Il backend sarà disponibile su `http://localhost:3000`
 ### Backend
 - Node.js
 - Express
+- MongoDB + Mongoose
+- Multer (upload file)
+- pdf-parse (estrazione testo da PDF)
 - CORS
