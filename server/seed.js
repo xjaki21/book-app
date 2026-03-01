@@ -87,11 +87,12 @@ async function seedDatabase() {
     await mongoose.connect(MONGODB_URI);
     console.log('Connected to MongoDB');
     
-    // Clear existing data
-    await User.deleteMany({});
-    await Book.deleteMany({});
-    await Chapter.deleteMany({});
-    console.log('Cleared existing data');
+    // Check if data already exists
+    const existingUsers = await User.countDocuments();
+    if (existingUsers > 0) {
+      console.log('⚠️  Database già popolato, seed ignorato.');
+      process.exit(0);
+    }
     
     // Create demo user
     const user = await User.create({
