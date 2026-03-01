@@ -2,7 +2,16 @@ const express = require('express');
 const multer = require('multer');
 const path = require('path');
 const { PDFParse } = require('pdf-parse');
+const cloudinary = require('cloudinary').v2;
+const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const router = express.Router();
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // Helper to extract text from PDF buffer
 async function extractPdfText(buffer) {
@@ -11,16 +20,14 @@ async function extractPdfText(buffer) {
   return result;
 }
 
-// Configure storage for covers
-const coverStorage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, '..', 'uploads', 'covers'));
+// Configure Cloudinary storage for covers
+const coverStorage = new CloudinaryStorage({
+  cloudinary,
+  params: {
+    folder: 'book-app/covers',
+    allowed_formats: ['jpg', 'jpeg', 'png', 'webp', 'gif'],
+    transformation: [{ width: 800, height: 1200, crop: 'limit', quality: 'auto' }],
   },
-  filename: (req, file, cb) => {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    const ext = path.extname(file.originalname);
-    cb(null, `cover-${uniqueSuffix}${ext}`);
-  }
 });
 
 // File filter - only images
@@ -60,8 +67,8 @@ router.post('/cover', uploadCover.single('cover'), (req, res) => {
     return res.status(400).json({ error: 'Nessun file caricato' });
   }
 
-  const imageUrl = `/uploads/covers/${req.file.filename}`;
-  res.json({ url: imageUrl });
+  // Cloudinary returns the URL in req.file.path
+  res.json({ url: req.file.path });
 });
 
 // Upload PDF and extract text

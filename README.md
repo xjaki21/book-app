@@ -8,7 +8,7 @@ Un'applicazione web per condividere e gestire libri nella community.
 - **Lista lettura**: Tieni traccia dei tuoi progressi (Da Leggere, In Lettura, Completato, In Pausa, Abbandonato)
 - **Community**: Esplora i libri pubblicati da altri utenti
 - **Gestione capitoli**: Organizza i tuoi libri in capitoli, scrivi direttamente o carica un PDF
-- **Copertine**: Carica immagini di copertina per i tuoi libri (JPEG, PNG, WebP, GIF — max 5MB)
+- **Copertine**: Carica immagini di copertina per i tuoi libri (JPEG, PNG, WebP, GIF — max 5MB), salvate su **Cloudinary**
 - **Import PDF**: Carica un PDF e il testo viene estratto automaticamente come capitolo
 
 
@@ -26,6 +26,7 @@ book-app/
 
 - **Node.js** (v18+)
 - **MongoDB** (locale o via Docker)
+- **Account Cloudinary** (gratuito — [registrati qui](https://cloudinary.com/users/register/free))
 
 ## Installazione
 
@@ -47,6 +48,11 @@ sudo systemctl start mongodb
 ```env
 MONGODB_URI=mongodb://localhost:27017/book-app
 PORT=3000
+
+# Cloudinary (trovi le credenziali nella dashboard di Cloudinary)
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
 ```
 
 4. (Opzionale) Popola il database con dati di esempio:
@@ -77,5 +83,6 @@ Il backend sarà disponibile su `http://localhost:3000`
 - Express
 - MongoDB + Mongoose
 - Multer (upload file)
+- Cloudinary + multer-storage-cloudinary (storage immagini)
 - pdf-parse (estrazione testo da PDF)
 - CORS
